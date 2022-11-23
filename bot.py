@@ -52,7 +52,7 @@ async def fourth_task(message):
                            reply_markup=markup)
 
     if storage[_id]["curr_task"]["curr_idx"] + 1 == len(storage[_id]["curr_task"]["task_test_data"]):
-        test_data = read_test_file("4.txt")
+        test_data = read_test_file("4")
         shuffle(test_data)
         storage[_id]["curr_task"]["task_test_data"] = test_data
         storage[_id]["curr_task"]["curr_idx"] = 0
@@ -166,7 +166,7 @@ async def go_on_test(message: types.Message):
     _id = message.from_user.id
 
     if storage[_id]["curr_task"]["task_no"] == 4:
-        fourth_task(message)
+        await fourth_task(message)
     elif storage[_id]["curr_task"]["task_no"] == 12:
         twelfth_task(message)
 
@@ -187,6 +187,6 @@ async def start_test(message: types.Message):
                                parse_mode="Markdown",
                                reply_markup=markup)
     elif storage[_id]["curr_task"]["task_no"] == 12:
-        await bot.send_photo(_id,
-                             open(f"./static/theories/12.png", 'rb'),
-                             reply_markup=markup)
+        await bot.send_document(_id,
+                                document=open(f"./static/theories/12.png", 'rb'),
+                                reply_markup=markup)
