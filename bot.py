@@ -60,24 +60,6 @@ async def fourth_task(message):
         storage[_id]["curr_task"]["curr_idx"] += 1
 
 
-def twelfth_task(message):
-    _id = message.from_user.id
-
-    curr_idx = storage[_id]["curr_task"]["curr_idx"]
-
-
-def first_task(message):
-    pass
-
-
-def second_task(message):
-    pass
-
-
-def third_task(message):
-    pass
-
-
 @dp.message_handler(commands=["start", "help"])
 async def send_welcome(message: types.Message):
     _id = message.from_user.id
@@ -93,7 +75,7 @@ async def send_welcome(message: types.Message):
         }
 
     markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    for num in (4, 12):
+    for num in (1, 2, 3, 4, 5, 12):
         tasks_btn = KeyboardButton(str(num))
         markup.add(tasks_btn)
 
@@ -106,7 +88,7 @@ async def send_welcome(message: types.Message):
                            reply_markup=markup)
 
 
-@dp.message_handler(lambda message: message.text in map(str, (4, 12)))
+@dp.message_handler(lambda message: message.text in map(str, (1, 2, 3, 4, 5, 12)))
 async def start_task(message: types.Message):
     _id = message.from_user.id
 
@@ -125,9 +107,11 @@ async def start_task(message: types.Message):
 async def start_test(message: types.Message):
     _id = message.from_user.id
 
-    test_data = read_test_file(str(storage[_id]["curr_task"]["task_no"]))
+    markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    markup.add("Меню")
 
     if storage[_id]["curr_task"]["task_no"] == 4:
+        test_data = read_test_file(str(storage[_id]["curr_task"]["task_no"]))
         storage[_id]["curr_task"]["curr_idx"] = 0
 
         shuffle(test_data)
@@ -137,13 +121,33 @@ async def start_test(message: types.Message):
 
         await go_on_test(message)
 
+    elif storage[_id]["curr_task"]["task_no"] == 1:
+        await bot.send_message(_id,
+                               "https://rustutors.ru/egeteoriya/egepraktika/2637-zadanie-1-3-praktika-egje-po-russkomu-jazyku-2022.html",
+                               reply_markup=markup)
+
+    elif storage[_id]["curr_task"]["task_no"] == 2:
+        await bot.send_message(_id,
+                               "https://rustutors.ru/egeteoriya/egepraktika/2637-zadanie-1-3-praktika-egje-po-russkomu-jazyku-2022.html",
+                               reply_markup=markup)
+
+    elif storage[_id]["curr_task"]["task_no"] == 3:
+        await bot.send_message(_id,
+                               "https://rustutors.ru/egeteoriya/egepraktika/2637-zadanie-1-3-praktika-egje-po-russkomu-jazyku-2022.html",
+                               reply_markup=markup)
+
+    elif storage[_id]["curr_task"]["task_no"] == 5:
+        await bot.send_message(_id,
+                               "https://rustutors.ru/egeteoriya/egepraktika/1646-ispravte-leksicheskuju-oshibku-podobrav-k-vydelennomu-slovu-paronim-zadanie-5-egje-praktika.html",
+                               reply_markup=markup)
+
 
 @dp.message_handler(lambda message: message.text.lower() == "меню")
-async def start_test(message: types.Message):
+async def start_menu(message: types.Message):
     _id = message.from_user.id
 
     markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    for num in (4, 12):
+    for num in (1, 2, 3, 4, 5, 12):
         tasks_btn = KeyboardButton(str(num))
         markup.add(tasks_btn)
 
@@ -167,8 +171,6 @@ async def go_on_test(message: types.Message):
 
     if storage[_id]["curr_task"]["task_no"] == 4:
         await fourth_task(message)
-    elif storage[_id]["curr_task"]["task_no"] == 12:
-        twelfth_task(message)
 
 
 @dp.message_handler(lambda message: message.text.lower() == "теория")
@@ -177,15 +179,43 @@ async def start_test(message: types.Message):
     print(storage[_id]["curr_task"]["task_no"])
 
     markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    for num in (4, 12):
+    for num in (1, 2, 3, 4, 5, 12):
         tasks_btn = KeyboardButton(str(num))
         markup.add(tasks_btn)
 
-    if storage[_id]["curr_task"]["task_no"] == 4:
+    if storage[_id]["curr_task"]["task_no"] == 1:
+        await bot.send_document(_id,
+                                document=open(f"./static/theories/1.png", 'rb'),
+                                reply_markup=markup)
+
+    elif storage[_id]["curr_task"]["task_no"] == 2:
+        await bot.send_message(_id,
+                               "Ну тут халява полная)))",
+                               reply_markup=markup)
+
+    elif storage[_id]["curr_task"]["task_no"] == 3:
+        await bot.send_document(_id,
+                                document=open(f"./static/theories/3.png", 'rb'),
+                                reply_markup=markup)
+
+    elif storage[_id]["curr_task"]["task_no"] == 4:
         await bot.send_message(_id,
                                read_theory_file("4"),
                                parse_mode="Markdown",
                                reply_markup=markup)
+
+    elif storage[_id]["curr_task"]["task_no"] == 5:
+        await bot.send_message(_id,
+                               read_theory_file("5"),
+                               parse_mode="Markdown",
+                               reply_markup=markup)
+        await bot.send_message(_id,
+                               "_Словарь паронимов:_"
+                               "\n\n"
+                               "https://rustutors.ru/egeteoriya/1414-paronimy-egje.html",
+                               parse_mode="Markdown",
+                               reply_markup=markup)
+
     elif storage[_id]["curr_task"]["task_no"] == 12:
         await bot.send_document(_id,
                                 document=open(f"./static/theories/12.png", 'rb'),
